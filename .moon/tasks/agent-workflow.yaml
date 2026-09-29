@@ -7,27 +7,14 @@ tasks:
   agents-install:
     command: bash node/tools/agent-workflow/install.sh
     options: {runFromWorkspaceRoot: true, cache: false}
-  agents-hooks:
-    command: bash node/tools/agent-workflow/install-hooks.sh
-    options: {runFromWorkspaceRoot: true, cache: false, runInCI: false}
   agents-check:
-    command: bash -c 'pnpm --dir node exec oxlint --config oxlint.config.ts --deny-warnings tools/agent-workflow && pnpm --dir node exec oxfmt --check tools/agent-workflow && node node/tools/agent-workflow/check.mjs'
-    deps: [agents-install, web:install]
+    command: bash -c 'pnpm --dir node exec oxlint --config oxlint.config.ts --deny-warnings tools/agent-workflow && pnpm --dir node exec oxfmt --check tools/agent-workflow && bash -n node/tools/agent-workflow/run.sh && bash -n node/tools/agent-workflow/install.sh'
+    deps: [agents-install, node-install]
     options: {runFromWorkspaceRoot: true, cache: false}
   terraform-mcp-install:
     command: node node/tools/agent-workflow/install-terraform-mcp.mjs
     options: {runFromWorkspaceRoot: true, cache: false, runInCI: false}
-  commitlint:
-    command: bash node/tools/agent-workflow/run.sh commitlint
-    options: {runFromWorkspaceRoot: true, cache: false}
-  browser-install:
-    command: bash node/tools/agent-workflow/run.sh playwright install chromium
-    deps: [agents-install]
-    options: {runFromWorkspaceRoot: true, cache: false, runInCI: false}
   browser:
     command: bash node/tools/agent-workflow/run.sh playwright-cli
+    deps: [agents-install]
     options: {runFromWorkspaceRoot: true, cache: false, runInCI: false}
-  browser-test:
-    command: bash node/tools/agent-workflow/run.sh playwright test --config node/tools/agent-workflow/playwright.config.mjs
-    deps: [agents-install, web:build, image-api:build, image-processor:install]
-    options: {runFromWorkspaceRoot: true, cache: false}

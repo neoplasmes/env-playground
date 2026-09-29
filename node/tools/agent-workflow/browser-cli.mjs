@@ -1,4 +1,4 @@
-import { chromium } from "@playwright/test";
+import { chromium } from "playwright-core";
 import { spawnSync } from "node:child_process";
 import { mkdir, writeFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";

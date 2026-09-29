@@ -5,8 +5,8 @@ tasks:
     command: pnpm --dir node install --lockfile-only
     options: { runFromWorkspaceRoot: true, cache: false }
   install:
-    command: pnpm --dir node install --frozen-lockfile
-    options: { runFromWorkspaceRoot: true, cache: false }
+    deps: [playground:node-install]
+    options: { cache: false }
   check:
     command: pnpm check
     deps: [install]

@@ -17,7 +17,7 @@
 - For substantive work, identify observable acceptance criteria, implement the
   change, run relevant checks, review the result, and report evidence and limits.
 - Use the pinned toolchain and moon tasks. On this computer,
-  `source node/tools/agent-workflow/activate.sh` activates the project-local tools
+  `source node/activate.sh` activates the project-local tools
   and the existing local C-compiler shim when system `cc` is absent.
 - Keep Node, Python, and Rust configuration in their language directories.
   Agent tooling lives in the separate `node/tools/agent-workflow` package.
@@ -59,7 +59,7 @@
   commit. A later instruction not to commit takes precedence. Pushing, publishing,
   merging, and deploying are separate actions and require task authorization.
 - Follow the executable commitlint configuration in
-  `node/tools/agent-workflow/commitlint.config.cjs`: Conventional Commits,
+  `node/commitlint.config.cjs`: Conventional Commits,
   `type(scope): imperative summary`, optional scope, English summary, no trailing
   period, header at most 100 characters. Examples:
   `feat(processor): support avif conversion`,

@@ -5,8 +5,8 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import assert from "node:assert/strict";
 
-const root = fileURLToPath(new URL("../../../", import.meta.url));
-const tooling = `${root}/node/tools/agent-workflow`;
+const root = fileURLToPath(new URL("../", import.meta.url));
+const tooling = `${root}/node`;
 const directory = mkdtempSync(join(tmpdir(), "playground-commitlint-"));
 try {
   for (const [message, accepted] of [
@@ -25,12 +25,12 @@ try {
     if (result.error) throw result.error;
     assert.equal(result.status === 0, accepted, `${message}\n${result.stdout}${result.stderr}`);
   }
-  for (const file of ["activate.sh", "run.sh", "install.sh", "install-hooks.sh"]) {
+  for (const file of ["activate.sh", "run.sh", "install-hooks.sh"]) {
     const result = spawnSync("bash", ["-n", `${tooling}/${file}`], { encoding: "utf8" });
     assert.equal(result.status, 0, result.stderr);
   }
   console.log(
-    "Agent tooling checks passed: commit-msg hook accepts conventional commits and rejects invalid messages.",
+    "Node tooling checks passed: commit-msg hook accepts conventional commits and rejects invalid messages.",
   );
 } finally {
   rmSync(directory, { recursive: true, force: true });

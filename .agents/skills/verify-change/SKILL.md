@@ -18,9 +18,10 @@ Use README.md and the current moon task definitions as the command source of tru
 | Terraform, Helm, bootstrap, delivery | infra:check, infra:test |
 | Cross-service upload/job/result contract | playground:smoke |
 | User-visible browser flow | playground:browser-test |
+| Shared Node tooling | playground:node-check; browser-test when its runner/spec changes |
 | Agent tooling | playground:agents-check; browser-test when its runner/spec changes |
 
-Invoke selected targets with moon run. Activate node/tools/agent-workflow/activate.sh when
+Invoke selected targets with moon run. Activate node/activate.sh when
 using this checkout's local toolchain. Use playground:check/test/build for changes
 spanning the application, rather than assuming that one package check covers callers.
 Do not require browser tests for prose-only changes.

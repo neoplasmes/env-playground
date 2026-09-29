@@ -1,0 +1,28 @@
+$schema: https://moonrepo.dev/schemas/tasks.json
+inheritedBy:
+  file: node/package.json
+tasks:
+  check:
+    deps: [node-check]
+  node-install:
+    command: pnpm --dir node install --frozen-lockfile
+    options: {runFromWorkspaceRoot: true, cache: false}
+  node-hooks:
+    command: bash node/install-hooks.sh
+    options: {runFromWorkspaceRoot: true, cache: false, runInCI: false}
+  node-check:
+    command: bash -c 'cd node && pnpm exec oxlint --config oxlint.config.ts --deny-warnings *.mjs *.cjs tests && pnpm exec oxfmt --check *.mjs *.cjs tests package.json && node check.mjs'
+    deps: [node-install]
+    options: {runFromWorkspaceRoot: true, cache: false}
+  commitlint:
+    command: bash node/run.sh commitlint
+    deps: [node-install]
+    options: {runFromWorkspaceRoot: true, cache: false}
+  browser-install:
+    command: bash node/run.sh playwright install chromium
+    deps: [node-install]
+    options: {runFromWorkspaceRoot: true, cache: false, runInCI: false}
+  browser-test:
+    command: bash node/run.sh playwright test --config node/playwright.config.mjs
+    deps: [node-install, web:build, image-api:build, image-processor:install]
+    options: {runFromWorkspaceRoot: true, cache: false}

@@ -3,22 +3,29 @@
 Правила репозитория находятся в `AGENTS.md`, роли — в `.codex/agents/`, навыки —
 в `.agents/skills/`. Настройки действуют для этого проекта; GitHub MCP не добавляется.
 
+Общие инструменты находятся в `node/`: commitlint, Git hook, конфигурация и
+сценарии Playwright, активация окружения. Их зависимости закреплены в основном
+`node/package.json` и `node/pnpm-lock.yaml`. В `node/tools/agent-workflow/` остаются
+MCP и Playwright CLI для исследования страниц агентом; это отдельный пакет.
+
 ## Установка на новом компьютере
 
 Сначала установи инструменты проекта по `README.md`. Для локального набора этого
-компьютера выполни `source node/tools/agent-workflow/activate.sh`. Эта обёртка
+компьютера выполни `source node/activate.sh`. Эта обёртка
 активирует инструменты через существующий bootstrap и, если системного `cc` нет,
 подключает уже установленный локальный C-компилятор из `.cache/native`.
 
 ```bash
+moon run playground:node-install
 moon run playground:agents-install
-moon run playground:agents-hooks
+moon run playground:node-hooks
 moon run playground:browser-install
 moon run playground:terraform-mcp-install
 ```
 
-Первая команда ставит закреплённые Node-инструменты, вторая включает проверку
-сообщений коммитов в этом checkout, третья загружает Chromium в `.cache/playwright`.
+Команды `node-install` и `agents-install` ставят общие Node-инструменты и отдельные
+инструменты агентов. `node-hooks` включает проверку сообщений коммитов в этом
+checkout, `browser-install` загружает Chromium в `.cache/playwright`.
 Последняя ставит Terraform MCP из официального архива с проверкой закреплённой
 SHA-256; для распаковки нужен `unzip`. Docker и Go для этого не требуются.
 Если Chromium сообщает о недостающих системных библиотеках, установи их через
@@ -81,8 +88,9 @@ Terraform MCP запускается только с группой `registry`: 
 `type(scope): summary`, например `fix(api): handle processor timeout`.
 Scope необязателен. Заголовок — до 100 символов; английское описание без точки.
 Конфигурация использует `@commitlint/config-conventional`.
-`playground:agents-check` проверяет линт/формат новых инструментов и поведение
-commit-msg hook. Он включён в общий `playground:check` через наследование moon-задач.
+`playground:node-check` проверяет общие Node-инструменты и поведение commit-msg
+hook; `playground:agents-check` проверяет инструменты агентов. Обе проверки входят
+в общий `playground:check` через наследование moon-задач.
 
 ```bash
 moon run playground:commitlint -- --last --verbose
@@ -102,7 +110,7 @@ moon run playground:browser -- --help
 Автоматический сценарий запускает три настоящих сервиса на свободных localhost
 портах с временной SQLite/файловой директорией. Проверяет загрузку, преобразование,
 опрос состояния, скачивание и ошибки входного файла. Данные рабочего приложения
-не используются. Отчёты лежат в `.local/agent-workflow/` и не коммитятся.
+не используются. Отчёты лежат в `.local/playwright/` и не коммитятся.
 
 Для исследования живого локального приложения используй отдельную именованную
 сессию Playwright CLI; закрывай только свою сессию. Скриншоты и browser traces

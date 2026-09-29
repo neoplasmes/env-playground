@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
-const python = fileURLToPath(new URL("../../../../python/.venv/bin/python", import.meta.url));
+const python = fileURLToPath(new URL("../../python/.venv/bin/python", import.meta.url));
 const source = () =>
   execFileSync(python, [
     "-c",

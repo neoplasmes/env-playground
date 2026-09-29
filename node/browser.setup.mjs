@@ -5,7 +5,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const root = fileURLToPath(new URL("../../../", import.meta.url));
+const root = fileURLToPath(new URL("../", import.meta.url));
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 let stopServices = async () => {};
 
@@ -25,7 +25,7 @@ async function reservePort() {
 
 export default async function setup() {
   const directory = await mkdtemp(join(tmpdir(), "playground-browser-"));
-  const artifacts = join(root, ".local/agent-workflow");
+  const artifacts = join(root, ".local/playwright");
   await mkdir(artifacts, { recursive: true });
   const logPath = join(artifacts, `services-${Date.now()}.log`);
   const log = await open(logPath, "w");

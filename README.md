@@ -29,7 +29,7 @@ Next.js принимает файл через BFF, Rust сохраняет за
 На текущем компьютере установлен отдельный набор инструментов в `.cache/proto`:
 
 ```bash
-source infra/bootstrap/activate.sh
+source node/activate.sh
 moon run playground:check
 moon run playground:test
 moon run playground:format
@@ -38,6 +38,12 @@ moon run playground:format
 В новом checkout: установи proto по [официальной инструкции](https://moonrepo.dev/docs/proto/install),
 затем `proto upgrade 0.62.3`, `proto install`. Используй активацию своего proto;
 `activate.sh` выше предназначен именно для инструментов в локальном `.cache`.
+Общие Node-инструменты (commitlint и браузерные тесты Playwright) находятся
+в `node/`. Проверки: `moon run playground:node-check` и
+`moon run playground:browser-test`; подключение Git hook:
+`moon run playground:node-hooks` после установки зависимостей. Инструменты агентов
+настраиваются отдельно по [AGENT_WORKFLOW.md](AGENT_WORKFLOW.md).
+
 Для нативной сборки Rust нужен C-компилятор и заголовки libc, поскольку SQLite
 собирается вместе с приложением. На Ubuntu: `sudo apt install build-essential`.
 Для контейнерного запуска нужен Docker с Compose и BuildKit.
@@ -201,7 +207,8 @@ SSH host key тоже поменяется; удаляй запись тольк
 Локально проверены oxlint/oxfmt/TypeScript, Ruff/ty, Clippy, тесты Python/Rust/фронта,
 правило padding, логика preview, Terraform validate и Helm lint/template.
 Также прошёл HTTP smoke: загрузка через BFF, идемпотентность задания, обработка
-и скачивание результата в PNG/JPEG/WebP. Браузерный E2E пока не запускался.
+и скачивание результата в PNG/JPEG/WebP. Браузерный E2E также прошёл: преобразование и скачивание WebP, отказ для
+слишком большого файла и обработка повреждённого изображения.
 Cloud.ru apply, установка платформы и работа webhooks требуют твоих credentials
 и ещё не выполнялись. Полная сборка Docker пока заблокирована: Docker daemon
 не может скачать слой с Docker Hub по IPv6 (`network is unreachable`).
