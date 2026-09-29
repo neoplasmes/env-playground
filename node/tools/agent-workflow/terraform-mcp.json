@@ -1,0 +1,10 @@
+{
+  "version": "1.3.0",
+  "source": "https://releases.hashicorp.com/terraform-mcp-server/1.3.0/terraform-mcp-server_1.3.0_SHA256SUMS",
+  "sha256": {
+    "linux_amd64": "f8ecdbfb8473af4d54f6ca428de59649ff4c74f1c8a904da1c2973fa345d4d26",
+    "linux_arm64": "9682ca6ac0a7cc0ab30cf1451bdb828ac7429f76f047168ddbaa75388dec6f2f",
+    "darwin_amd64": "5167ab20714ec95f51a922f9cb17eaf68c076a132afd60dab79bae1186b65c78",
+    "darwin_arm64": "94469fe7ce9a7b3af6cf5c7949619f3bab84dfb9e038914fd8f59e4d33a6add4"
+  }
+}

@@ -1,0 +1,21 @@
+[agents]
+enabled = true
+max_concurrent_threads_per_session = 3
+
+[mcp_servers.context7]
+url = "https://mcp.context7.com/mcp"
+startup_timeout_sec = 30
+tool_timeout_sec = 60
+
+[mcp_servers.next-devtools]
+enabled_tools = ["nextjs_index", "nextjs_call", "nextjs_docs"]
+command = "bash"
+args = ["-c", 'exec bash "$(git rev-parse --show-toplevel)/node/tools/agent-workflow/run.sh" next-devtools-mcp']
+startup_timeout_sec = 30
+tool_timeout_sec = 60
+
+[mcp_servers.terraform]
+command = "bash"
+args = ["-c", 'exec bash "$(git rev-parse --show-toplevel)/node/tools/agent-workflow/run.sh" terraform-mcp']
+startup_timeout_sec = 30
+tool_timeout_sec = 60

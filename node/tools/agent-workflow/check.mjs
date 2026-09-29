@@ -25,7 +25,7 @@ try {
     if (result.error) throw result.error;
     assert.equal(result.status === 0, accepted, `${message}\n${result.stdout}${result.stderr}`);
   }
-  for (const file of ["run.sh", "install.sh", "install-hooks.sh"]) {
+  for (const file of ["activate.sh", "run.sh", "install.sh", "install-hooks.sh"]) {
     const result = spawnSync("bash", ["-n", `${tooling}/${file}`], { encoding: "utf8" });
     assert.equal(result.status, 0, result.stderr);
   }

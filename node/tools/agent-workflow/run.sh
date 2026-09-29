@@ -3,12 +3,14 @@ set -euo pipefail
 
 workflow_root=$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)
 tooling_dir="$workflow_root/node/tools/agent-workflow"
-if [[ -x "$workflow_root/.cache/proto/bin/node" ]]; then
-  source "$workflow_root/infra/bootstrap/activate.sh"
-fi
+source "$tooling_dir/activate.sh"
 cd "$workflow_root"
 
 case "${1:-}" in
+  terraform-mcp)
+    shift
+    exec "$workflow_root/.cache/agent-workflow/bin/terraform-mcp-server" stdio --toolsets=registry "$@"
+    ;;
   commitlint)
     shift
     exec "$tooling_dir/node_modules/.bin/commitlint" --config "$tooling_dir/commitlint.config.cjs" "$@"
@@ -25,7 +27,7 @@ case "${1:-}" in
     exec "$tooling_dir/node_modules/.bin/$tool" "$@"
     ;;
   *)
-    printf 'Usage: %s {commitlint|playwright-cli|next-devtools-mcp|playwright} [args...]\n' "$0" >&2
+    printf 'Usage: %s {commitlint|playwright-cli|next-devtools-mcp|terraform-mcp|playwright} [args...]\n' "$0" >&2
     exit 2
     ;;
 esac
