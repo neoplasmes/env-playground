@@ -1,0 +1,4 @@
+minimumReleaseAgeExclude:
+  - "@playwright/cli@0.1.22"
+  - playwright-core@1.64.0-alpha-1790635538000
+  - playwright@1.64.0-alpha-1790635538000
