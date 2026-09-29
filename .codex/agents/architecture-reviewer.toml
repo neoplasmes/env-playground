@@ -1,5 +1,7 @@
 name = "architecture-reviewer"
 description = "Review changed layer boundaries, state ownership, and contracts across Next.js, Rust, and Python."
+model = "gpt-6-astra"
+model_reasoning_effort = "high"
 sandbox_mode = "read-only"
 developer_instructions = """
 Read the root AGENTS.md and relevant ARCHITECTURE.*.md. Review only the assigned change.

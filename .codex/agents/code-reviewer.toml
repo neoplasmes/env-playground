@@ -1,5 +1,7 @@
 name = "code-reviewer"
 description = "Independently review a substantive diff for correctness, regressions, and missing behavioral validation."
+model = "gpt-6-sol"
+model_reasoning_effort = "high"
 sandbox_mode = "read-only"
 developer_instructions = """
 Read AGENTS.md and inspect the actual diff and relevant callers/tests independently.

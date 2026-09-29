@@ -39,6 +39,9 @@
 
 ## Delegation
 
+- Use the model and reasoning effort configured in `.codex/agents/` for each role.
+  For agents without a custom role, use the defaults in `.codex/config.toml`.
+  Do not replace these selections with the parent chat's model or reasoning effort.
 - Use a separate `code-reviewer` for substantive code/configuration changes before
   closing the task. It should inspect the diff independently and report actionable
   defects, not rephrase the implementation summary.
