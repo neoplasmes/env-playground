@@ -1,0 +1,11 @@
+$schema: https://moonrepo.dev/schemas/workspace.json
+projects:
+  playground: .
+  web: node/apps/web
+  image-api: rust/apps/image_api
+  image-processor: python/apps/image_processor
+  repo-style: python/packages/repo_style
+  infra: infra
+vcs:
+  defaultBranch: master
+  provider: github

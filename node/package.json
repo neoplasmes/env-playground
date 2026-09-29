@@ -1,0 +1,16 @@
+{
+  "name": "env-playground-node",
+  "private": true,
+  "packageManager": "pnpm@12.6.0",
+  "engines": {
+    "node": ">=26.10.0 <27"
+  },
+  "devDependencies": {
+    "typescript": "7.0.2",
+    "vitest": "5.0.2",
+    "oxlint": "1.86.0",
+    "oxfmt": "0.71.0",
+    "@stylistic/eslint-plugin": "5.10.0"
+  },
+  "type": "module"
+}

@@ -1,0 +1,40 @@
+$schema: https://moonrepo.dev/schemas/project.json
+language: unknown
+layer: configuration
+tasks:
+  setup:
+    command: proto install
+    options:
+      cache: false
+  check:
+    deps:
+      - web:check
+      - image-api:check
+      - image-processor:check
+      - repo-style:check
+      - infra:check
+  test:
+    deps:
+      - web:test
+      - image-api:test
+      - image-processor:test
+      - repo-style:test
+      - infra:test
+  format:
+    deps: [web:format, image-processor:format, image-api:format, infra:format]
+  build:
+    deps:
+      - web:build
+      - image-api:build
+  up:
+    command: docker compose -f infra/local/compose.yaml up --build -d --wait
+    options:
+      cache: false
+  smoke:
+    command: uv run --project python --package image-processor --frozen python infra/local/smoke.py
+    deps: [web:build, image-api:build, image-processor:install]
+    options: {cache: false}
+  down:
+    command: docker compose -f infra/local/compose.yaml down
+    options:
+      cache: false

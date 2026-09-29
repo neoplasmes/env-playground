@@ -1,0 +1,24 @@
+when:
+  - event: cron
+    cron: reconcile
+    branch: master
+steps:
+  - name: reconcile
+    image: ghcr.io/neoplasmes/env-playground-toolchain:2026-09-29
+    environment:
+      GITHUB_TOKEN: {from_secret: github_read_token}
+      REGISTRY_TOKEN: {from_secret: registry_token}
+      REGISTRY_USER: neoplasmes
+      DEPLOY_KUBECONFIG: {from_secret: deploy_kubeconfig}
+      BUILDKIT_CA: {from_secret: buildkit_ca}
+      BUILDKIT_CERT: {from_secret: buildkit_cert}
+      BUILDKIT_KEY: {from_secret: buildkit_key}
+      PLAYGROUND_DOMAIN: {from_secret: playground_domain}
+      WOODPECKER_STATUS_PREFIX: ci/woodpecker
+    commands:
+      - moon run infra:reconcile
+    backend_options:
+      kubernetes:
+        resources:
+          requests: {cpu: "100m", memory: "128Mi"}
+          limits: {cpu: "1", memory: "512Mi"}

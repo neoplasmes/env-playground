@@ -1,0 +1,30 @@
+language: typescript
+layer: application
+tasks:
+  lock:
+    command: pnpm --dir node install --lockfile-only
+    options: { runFromWorkspaceRoot: true, cache: false }
+  install:
+    command: pnpm --dir node install --frozen-lockfile
+    options: { runFromWorkspaceRoot: true, cache: false }
+  check:
+    command: pnpm check
+    deps: [install]
+    inputs: ["/node/**/*", "!/node/**/node_modules/**", "!/node/**/.next/**", "/.prototools"]
+  test:
+    command: pnpm test
+    deps: [install]
+    inputs: ["/node/**/*", "!/node/**/node_modules/**", "!/node/**/.next/**"]
+  format:
+    command: pnpm format
+    deps: [install]
+    options: { cache: false }
+  build:
+    command: pnpm build
+    deps: [install]
+    inputs: ["/node/**/*", "!/node/**/node_modules/**", "!/node/**/.next/**"]
+    outputs: [".next"]
+  dev:
+    command: pnpm dev
+    deps: [install]
+    options: { persistent: true, cache: false }

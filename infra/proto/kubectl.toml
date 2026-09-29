@@ -1,0 +1,19 @@
+name = "kubectl"
+type = "cli"
+[platform.linux]
+checksum-file = "kubectl.sha256"
+download-file = "kubectl"
+exe-path = "kubectl"
+[platform.macos]
+checksum-file = "kubectl.sha256"
+download-file = "kubectl"
+exe-path = "kubectl"
+[install]
+download-url = "https://dl.k8s.io/release/v{version}/bin/{os}/{arch}/kubectl"
+checksum-url = "https://dl.k8s.io/release/v{version}/bin/{os}/{arch}/kubectl.sha256"
+[install.arch]
+x64 = "amd64"
+[install.os]
+macos = "darwin"
+[resolve]
+versions = ["1.37.0"]

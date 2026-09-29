@@ -1,0 +1,13 @@
+[workspace]
+members = ["apps/image_api"]
+resolver = "3"
+
+[workspace.package]
+edition = "2024"
+rust-version = "1.98"
+version = "0.1.0"
+
+[profile.release]
+lto = "thin"
+codegen-units = 1
+strip = true

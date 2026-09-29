@@ -1,0 +1,15 @@
+proto = "0.62.3"
+moon = "2.5.6"
+node = "26.10.0"
+pnpm = "12.6.0"
+python = "3.14.7"
+uv = "0.12.20"
+rust = "1.98.1"
+terraform = "1.16.4"
+kubectl = "1.37.0"
+helm = "4.3.0"
+
+[plugins.tools]
+helm = "file://./infra/proto/helm.toml"
+kubectl = "file://./infra/proto/kubectl.toml"
+terraform = "file://./infra/proto/terraform.toml"

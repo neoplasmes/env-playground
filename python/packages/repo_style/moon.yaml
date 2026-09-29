@@ -1,0 +1,17 @@
+language: python
+layer: tool
+tasks:
+  check:
+    command: uv run --project python --package repo-style --frozen statement-padding python rust infra/bootstrap infra/ci infra/local
+    deps: [image-processor:install]
+    options: {runFromWorkspaceRoot: true}
+    inputs: ["/python/**/*", "!/python/.venv/**", "!/python/**/__pycache__/**", "/rust/**/*.rs", "!/rust/target/**", "/infra/**/*.py"]
+  fix:
+    command: uv run --project python --package repo-style --frozen statement-padding --fix python rust infra/bootstrap infra/ci infra/local
+    deps: [image-processor:install]
+    options: {runFromWorkspaceRoot: true, cache: false}
+  test:
+    command: uv run --project python --package repo-style --frozen pytest python/packages/repo_style/tests
+    deps: [image-processor:install]
+    options: {runFromWorkspaceRoot: true}
+    inputs: ["/python/packages/repo_style/**/*"]

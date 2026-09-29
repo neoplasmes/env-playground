@@ -1,0 +1,27 @@
+language: rust
+layer: application
+tasks:
+  lock:
+    command: bash -c 'cd rust && cargo generate-lockfile'
+    options: {runFromWorkspaceRoot: true, cache: false}
+  check:
+    command: bash -c 'uv run --project python --package repo-style --frozen statement-padding rust && cd rust && cargo fmt --all --check && cargo clippy --workspace --all-targets --locked -- -D warnings'
+    deps: [image-processor:install]
+    options: {runFromWorkspaceRoot: true}
+    inputs: ["/rust/**/*", "!/rust/target/**", "/.prototools", "/python/packages/repo_style/**/*", "/python/uv.lock"]
+  test:
+    command: bash -c 'cd rust && cargo test --workspace --locked'
+    options: {runFromWorkspaceRoot: true}
+    inputs: ["/rust/**/*", "!/rust/target/**"]
+  format:
+    command: bash -c '(cd rust && cargo fmt --all) && uv run --project python --package repo-style --frozen statement-padding --fix rust'
+    deps: [image-processor:install]
+    options: {runFromWorkspaceRoot: true, cache: false}
+  build:
+    command: bash -c 'cd rust && cargo build --release --locked'
+    options: {runFromWorkspaceRoot: true}
+    inputs: ["/rust/**/*", "!/rust/target/**"]
+    outputs: ["/rust/target/release/image-api"]
+  dev:
+    command: bash -c 'cd rust && cargo run --locked --bin image-api'
+    options: {runFromWorkspaceRoot: true, persistent: true, cache: false}

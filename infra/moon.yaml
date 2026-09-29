@@ -1,0 +1,55 @@
+language: bash
+layer: configuration
+tasks:
+  prepare:
+    command: bash infra/bootstrap/prepare.sh
+    options: {runFromWorkspaceRoot: true, cache: false}
+  init:
+    command: bash infra/bootstrap/terraform.sh init
+    options: {runFromWorkspaceRoot: true, cache: false}
+  catalog:
+    command: bash infra/bootstrap/terraform.sh catalog
+    options: {runFromWorkspaceRoot: true, cache: false}
+  check:
+    command: bash infra/check.sh
+    deps: [image-processor:install]
+    options: {runFromWorkspaceRoot: true, cache: false}
+  test:
+    command: python -m unittest discover -s infra/ci -p 'test_*.py'
+    options: {runFromWorkspaceRoot: true}
+    inputs: ["/infra/ci/**/*.py"]
+  format:
+    command: bash -c 'terraform -chdir=infra/terraform fmt && uv run --project python --frozen ruff check --fix infra/bootstrap infra/ci infra/local && uv run --project python --frozen ruff format infra/bootstrap infra/ci infra/local && uv run --project python --package repo-style --frozen statement-padding --fix infra/bootstrap infra/ci infra/local'
+    deps: [image-processor:install]
+    options: {runFromWorkspaceRoot: true, cache: false}
+  plan:
+    command: bash infra/bootstrap/terraform.sh plan
+    options: {runFromWorkspaceRoot: true, cache: false}
+  apply:
+    command: bash infra/bootstrap/terraform.sh apply
+    options: {runFromWorkspaceRoot: true, cache: false, interactive: true}
+  destroy-plan:
+    command: bash infra/bootstrap/terraform.sh destroy-plan
+    options: {runFromWorkspaceRoot: true, cache: false}
+  destroy:
+    command: bash infra/bootstrap/terraform.sh destroy
+    options: {runFromWorkspaceRoot: true, cache: false, interactive: true}
+  cluster:
+    command: python infra/bootstrap/cluster.py
+    options: {runFromWorkspaceRoot: true, cache: false}
+  platform:
+    command: bash infra/bootstrap/platform.sh
+    options: {runFromWorkspaceRoot: true, cache: false}
+  reconcile:
+    command: bash infra/ci/delivery.sh
+    options: {runFromWorkspaceRoot: true, cache: false}
+  promote:
+    command: python infra/ci/promote.py
+    options: {runFromWorkspaceRoot: true, cache: false}
+  toolchain-build:
+    command: docker build -f infra/ci/Dockerfile -t ghcr.io/neoplasmes/env-playground-toolchain:2026-09-29 .
+    options: {runFromWorkspaceRoot: true, cache: false}
+  toolchain-push:
+    command: docker push ghcr.io/neoplasmes/env-playground-toolchain:2026-09-29
+    deps: [toolchain-build]
+    options: {runFromWorkspaceRoot: true, cache: false}

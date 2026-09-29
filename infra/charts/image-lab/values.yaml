@@ -1,0 +1,25 @@
+host: dev.127-0-0-1.sslip.io
+issuer: letsencrypt
+revision: local
+pullSecret: registry
+storageSize: 8Gi
+images:
+  web: ghcr.io/neoplasmes/env-playground-web:local
+  api: ghcr.io/neoplasmes/env-playground-api:local
+  processor: ghcr.io/neoplasmes/env-playground-processor:local
+components:
+  web:
+    port: 3000
+    resources:
+      requests: {cpu: 50m, memory: 128Mi}
+      limits: {cpu: "1", memory: 512Mi}
+  api:
+    port: 8080
+    resources:
+      requests: {cpu: 50m, memory: 64Mi}
+      limits: {cpu: "1", memory: 384Mi}
+  processor:
+    port: 8081
+    resources:
+      requests: {cpu: 50m, memory: 128Mi}
+      limits: {cpu: "1", memory: 768Mi}

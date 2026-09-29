@@ -1,0 +1,74 @@
+{{- range $name, $component := .Values.components }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $name }}
+  labels: {app: {{ $name }}, app.kubernetes.io/part-of: image-lab}
+spec:
+  replicas: 1
+  strategy: {type: Recreate}
+  selector:
+    matchLabels: {app: {{ $name }}}
+  template:
+    metadata:
+      labels: {app: {{ $name }}}
+      annotations:
+        playground/revision: {{ $.Values.revision | quote }}
+    spec:
+      automountServiceAccountToken: false
+      imagePullSecrets: [{name: {{ $.Values.pullSecret }}}]
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+        seccompProfile: {type: RuntimeDefault}
+      containers:
+        - name: {{ $name }}
+          image: {{ index $.Values.images $name | quote }}
+          ports: [{name: http, containerPort: {{ $component.port }}}]
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities: {drop: [ALL]}
+          env:
+            {{- if eq $name "web" }}
+            - {name: IMAGE_API_URL, value: "http://api:8080"}
+            - {name: PUBLIC_ORIGIN, value: {{ printf "https://%s" $.Values.host | quote }}}
+            {{- else if eq $name "api" }}
+            - {name: PROCESSOR_URL, value: "http://processor:8081"}
+            - {name: DATA_DIR, value: /data}
+            {{- end }}
+          readinessProbe:
+            httpGet: {path: /healthz, port: http}
+            initialDelaySeconds: 3
+          livenessProbe:
+            httpGet: {path: /healthz, port: http}
+            initialDelaySeconds: 20
+          resources: {{ toYaml $component.resources | nindent 12 }}
+          {{- if eq $name "api" }}
+          volumeMounts: [{name: data, mountPath: /data}]
+          {{- end }}
+      {{- if eq $name "api" }}
+      volumes: [{name: data, persistentVolumeClaim: {claimName: jobs}}]
+      {{- end }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $name }}
+spec:
+  selector: {app: {{ $name }}}
+  ports: [{name: http, port: {{ $component.port }}, targetPort: http}]
+{{- end }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: jobs
+spec:
+  accessModes: [ReadWriteOnce]
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: {{ .Values.storageSize }}

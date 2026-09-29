@@ -1,0 +1,20 @@
+[project]
+name = "playground-python"
+version = "0.1.0"
+requires-python = ">=3.14,<3.15"
+dependencies = []
+[tool.uv]
+package = false
+[tool.uv.workspace]
+members = ["apps/*", "packages/*"]
+[dependency-groups]
+dev = ["ruff==0.16.9", "ty==0.0.84", "pytest==9.1.1", "httpx==0.28.1"]
+[tool.ruff]
+target-version = "py314"
+line-length = 100
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+[tool.pytest.ini_options]
+testpaths = ["apps/image_processor/tests", "packages/repo_style/tests"]
+[tool.ty.environment]
+python-version = "3.14"

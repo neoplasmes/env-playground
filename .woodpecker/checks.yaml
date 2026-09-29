@@ -1,0 +1,18 @@
+when:
+  - event: [push, pull_request]
+steps:
+  - name: verify
+    image: ghcr.io/neoplasmes/env-playground-toolchain:2026-09-29
+    environment:
+      NEXT_TELEMETRY_DISABLED: "1"
+      UV_CACHE_DIR: /tmp/uv-cache
+      CARGO_TARGET_DIR: /tmp/cargo-target
+    commands:
+      - moon run playground:check
+      - moon run playground:test
+      - moon run playground:build
+    backend_options:
+      kubernetes:
+        resources:
+          requests: {cpu: "500m", memory: "1Gi"}
+          limits: {cpu: "2", memory: "3Gi"}

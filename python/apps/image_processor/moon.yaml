@@ -1,0 +1,27 @@
+language: python
+layer: application
+tasks:
+  lock:
+    command: uv lock --project python
+    options: {runFromWorkspaceRoot: true, cache: false}
+  install:
+    command: uv sync --project python --all-packages --frozen
+    options: {runFromWorkspaceRoot: true, cache: false}
+  check:
+    command: bash -c 'uv run --project python --frozen ruff check python && uv run --project python --frozen ruff format --check python && uv run --project python --frozen ty check python/apps/image_processor/src && uv run --project python --package repo-style --frozen statement-padding python'
+    deps: [install]
+    options: {runFromWorkspaceRoot: true}
+    inputs: ["/python/**/*", "!/python/.venv/**", "!/python/**/__pycache__/**", "/.prototools"]
+  test:
+    command: uv run --project python --frozen pytest python/apps/image_processor/tests
+    deps: [install]
+    options: {runFromWorkspaceRoot: true}
+    inputs: ["/python/**/*", "!/python/.venv/**", "!/python/**/__pycache__/**"]
+  format:
+    command: bash -c 'uv run --project python --frozen ruff format python && uv run --project python --frozen ruff check --fix python && uv run --project python --package repo-style --frozen statement-padding --fix python'
+    deps: [install]
+    options: {runFromWorkspaceRoot: true, cache: false}
+  dev:
+    command: uv run --project python --package image-processor --frozen uvicorn image_processor.main:create_app --factory --host 127.0.0.1 --port 8081
+    deps: [install]
+    options: {runFromWorkspaceRoot: true, persistent: true, cache: false}

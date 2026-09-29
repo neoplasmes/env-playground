@@ -1,0 +1,19 @@
+name = "terraform"
+type = "cli"
+[platform.linux]
+checksum-file = "terraform_{version}_SHA256SUMS"
+download-file = "terraform_{version}_{os}_{arch}.zip"
+exe-path = "terraform"
+[platform.macos]
+checksum-file = "terraform_{version}_SHA256SUMS"
+download-file = "terraform_{version}_{os}_{arch}.zip"
+exe-path = "terraform"
+[install]
+download-url = "https://releases.hashicorp.com/terraform/{version}/terraform_{version}_{os}_{arch}.zip"
+checksum-url = "https://releases.hashicorp.com/terraform/{version}/terraform_{version}_SHA256SUMS"
+[install.arch]
+x64 = "amd64"
+[install.os]
+macos = "darwin"
+[resolve]
+versions = ["1.16.4"]
