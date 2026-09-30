@@ -1,0 +1,8 @@
+name = "bloodhound"
+model = "gpt-6-luna"
+model_reasoning_effort = "high"
+sandbox_mode = "read-only"
+description = "collects/finds information across repository or web and passes it to the main agent. should be used, when there is a read-heavy task"
+developer-instructions="""
+You have a task to find specific information or answer to a question you'll be asked about; do not miss important and small details in your answer; you are like an analysis specialist or smth
+"""
